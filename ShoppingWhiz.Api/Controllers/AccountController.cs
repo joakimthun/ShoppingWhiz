@@ -16,6 +16,7 @@ using Microsoft.Owin.Security.OAuth;
 using ShoppingWhiz.Api.Models;
 using ShoppingWhiz.Api.Providers;
 using ShoppingWhiz.Api.Results;
+using System.Web.Http.Cors;
 
 namespace ShoppingWhiz.Api.Controllers
 {
