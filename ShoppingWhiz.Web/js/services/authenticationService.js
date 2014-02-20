@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-shoppingWhiz.factory('authenticationService', function($http, $resource, urlHelper) {
+shoppingWhiz.factory('authenticationService', function($http, $resource, $location, urlHelper) {
     var db = window.localStorage;
 
     function getTokenRequestData(user) {
@@ -37,6 +37,14 @@ shoppingWhiz.factory('authenticationService', function($http, $resource, urlHelp
                 'isLoggedIn': function() {
                     return this.token != null && this.currentUser != null;
                 }
+            }
+        },
+        getAuthorizationHeader: function() {
+            return 'Bearer ' + db.getItem('token');
+        },
+        authorizeUser: function() {
+            if(db.getItem('token') == null || db.getItem('currentUser') == null) {
+                $location.url('/');
             }
         }
     };

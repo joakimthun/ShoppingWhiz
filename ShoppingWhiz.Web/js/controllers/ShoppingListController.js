@@ -1,30 +1,55 @@
 ﻿'use strict';
 
 shoppingWhiz.controller('ShoppingListController',
-    function ShoppingListController($scope, $location, shoppingListService) {
+    function ShoppingListController($scope, $location, shoppingListService, authenticationService) {
+        $scope.showError = { display: 'none' };
+
+        authenticationService.authorizeUser();
         
-        $scope.lists = [];
+        shoppingListService.getLists(function(data) {
+            $scope.lists = data;
+            setTotal(data);
+        });
 
-        $scope.addItem = function() {
-            $location.url('/newItem');
-        };
-
-        $scope.deleteItem = function(item) {
-            for(var i = 0; i < $scope.items.length; i++) {
-                if($scope.items[i].id === item.id) {
-                    $scope.items.splice(i, 1);
-                    break;
-                }     
+        function setTotal(data) {
+            var total = 0;
+            for(var i = 0; i < data.length; i++) {
+                total += data[i].Total;
             }
+
+            $scope.lists.Total = total;
+        }
+
+        $scope.addList = function() {
+            $location.url('/newList');
         };
 
-        $scope.saveItem = function() {
-            var item = $scope.item;
-            if(item) {
-                if(item.store && item.total) {
-                    item.id = nextId();
-                    $scope.items.push(item);
-                    $location.url('/');
+        $scope.deleteList = function(list) {
+            shoppingListService.deleteList(list.Id, function(status) {
+                if(status === 200) {
+                    for(var i = 0; i < $scope.lists.length; i++) {
+                        if($scope.lists[i].Id === list.Id) {
+                            $scope.lists.splice(i, 1);
+                            break;
+                        }     
+                    }
+                    setTotal($scope.lists);
+                } 
+            });
+        };
+
+        $scope.saveList = function() {
+            var list = $scope.list;
+            if(list) {
+                if(list.store && list.total) {
+                    shoppingListService.saveList(list, function(status) {
+                        if(status === 204) {
+                            $location.url('/shoppingList');
+                        }
+                        else {
+                            $scope.showError.display = 'inline';
+                        }
+                    });
                 }    
             }    
         };
@@ -35,39 +60,6 @@ shoppingWhiz.controller('ShoppingListController',
 
         function nextId() {
             return $scope.items.length + 1; 
-        }
-
-        //$scope.items = [
-        //    {
-        //        id: 1,
-        //        store: 'Ica',
-        //        total: 287
-        //    },
-        //    {
-        //        id: 2,
-        //        store: 'Willys',
-        //        total: 95
-        //    },
-        //    {
-        //        id: 3,
-        //        store: 'Coop',
-        //        total: 501
-        //    },
-        //    {
-        //        id: 4,
-        //        store: 'Lidl',
-        //        total: 403
-        //    },
-        //    {
-        //        id: 5,
-        //        store: 'Willys',
-        //        total: 900
-        //    },
-        //    {
-        //        id: 6,
-        //        store: 'Coop',
-        //        total: 560
-        //    }
-        //];        
+        }        
     }
 ); 

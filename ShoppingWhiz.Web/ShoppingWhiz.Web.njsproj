@@ -53,7 +53,7 @@
     <Content Include="index.html" />
     <Content Include="js\templates\login.html" />
     <Content Include="js\templates\signup.html" />
-    <Content Include="js\templates\newPurchase.html" />
+    <Content Include="js\templates\newList.html" />
     <Content Include="js\templates\shoppingList.html" />
     <Content Include="lib\angular\angular-animate.min.js.map" />
     <Content Include="lib\angular\angular-cookies.min.js.map" />

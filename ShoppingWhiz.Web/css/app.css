@@ -9,7 +9,7 @@
 .item-total {
     position: relative;
     bottom: 30px;
-    font-size: 100%;
+    font-size: 120%;
 }
 
 .item-total-container {
@@ -50,4 +50,16 @@
 
 .form-control {
     height: 55px;
+}
+
+.error-row {
+    margin-bottom: 10px;
+}
+
+.label-error {
+    font-size: 100%;
+}
+
+.total-well {
+    margin-top: 20px;
 }
